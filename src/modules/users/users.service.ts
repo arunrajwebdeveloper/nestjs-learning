@@ -9,6 +9,8 @@ import { User, UserDocument } from './schemas/user.schema';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import * as bcrypt from 'bcryptjs';
+import { CreateUserDetailsDto } from './dto/create-user-details.dto';
+import { UserResponseDto } from './dto/user-response.dto';
 
 @Injectable()
 export class UsersService {
@@ -53,9 +55,8 @@ export class UsersService {
 
     const user = await this.userModel
       .findById(id)
-      .select('name email')
-      .populate('userDetails')
-      .exec(); // remove field add - infront of key
+      .select('-refreshToken -password')
+      .exec(); // to remove key add - infront, to select specific key just add keys (only one method works at a time)
     if (!user) throw new NotFoundException('User not found');
     return user;
   }
@@ -90,14 +91,6 @@ export class UsersService {
     return { message: 'User deleted successfully' };
   }
 
-  async updateUserDetails(userId: string, userDetailsId: string) {
-    return this.userModel.findByIdAndUpdate(
-      userId,
-      { userDetails: userDetailsId },
-      { new: true },
-    );
-  }
-
   async updateRefreshToken(userId: string, refreshToken: string | null) {
     const hashedToken = refreshToken
       ? await bcrypt.hash(refreshToken, 10)
@@ -105,6 +98,26 @@ export class UsersService {
     await this.userModel.findByIdAndUpdate(userId, {
       refreshToken: hashedToken,
     });
+  }
+
+  async updateUserDetails(
+    id: string,
+    details: CreateUserDetailsDto,
+  ): Promise<UserResponseDto> {
+    const user = await this.userModel.findByIdAndUpdate(
+      id,
+      { userDetails: details },
+      { new: true },
+    );
+
+    if (!user) throw new NotFoundException('User not found');
+
+    return {
+      id: user._id.toString(),
+      name: user.name,
+      email: user.email,
+      userDetails: user.userDetails,
+    };
   }
 
   /**

@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Schema as MongooseSchema, Types } from 'mongoose';
-import { UserDetails } from '../../user-details/schemas/user-details.schema';
+import { UserDetails, UserDetailsSchema } from './user-details.schema';
 
 export type UserDocument = User & Document;
 
@@ -21,8 +21,8 @@ export class User {
   @Prop({ type: String, default: null })
   refreshToken: string | null;
 
-  @Prop({ type: MongooseSchema.Types.ObjectId, ref: 'UserDetails' }) // ✅ Link to UserDetails
-  userDetails: Types.ObjectId | UserDetails;
+  @Prop({ type: UserDetailsSchema }) // ✅ Embedded UserDetails
+  userDetails?: UserDetails;
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);
