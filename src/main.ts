@@ -19,8 +19,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs/swagger', app, document); // docs path 'docs/swagger'
 
-  // app.enableCors();
-  // app.setGlobalPrefix('api'); // Set a global prefix for all routes (e.g., /api/users)
+  app.enableCors();
+  app.setGlobalPrefix('api'); // Set a global prefix for all routes (e.g., /api/users)
   await app.listen(process.env.PORT ?? 3000);
 }
 bootstrap();
