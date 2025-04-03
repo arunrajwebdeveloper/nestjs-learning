@@ -2,11 +2,21 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
+import helmet from 'helmet';
 
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  app.use(
+    helmet({
+      contentSecurityPolicy: false, // ✅ Disables CSP (useful for inline scripts)
+      frameguard: { action: 'deny' }, // ✅ Prevents clickjacking by denying iframes
+      referrerPolicy: { policy: 'no-referrer' }, // ✅ Sends no referrer information
+      hsts: { maxAge: 31536000, includeSubDomains: true, preload: true }, // ✅ Enforces HTTPS for 1 year (with preload & subdomains)
+    }),
+  );
 
   // Swagger Configuration
   const config = new DocumentBuilder()

@@ -2,6 +2,8 @@ import { Module } from '@nestjs/common';
 import { UsersModule } from './modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -12,6 +14,30 @@ if (!mongoUri) {
 }
 
 @Module({
-  imports: [MongooseModule.forRoot(mongoUri), AuthModule, UsersModule],
+  imports: [
+    MongooseModule.forRoot(mongoUri),
+    AuthModule,
+    UsersModule,
+    ThrottlerModule.forRoot({
+      throttlers: [
+        {
+          name: 'short',
+          ttl: 1000, // ✅ Time window (seconds)
+          limit: 3, // ✅ Max 3 requests per window per user
+        },
+        {
+          name: 'long',
+          ttl: 60000,
+          limit: 100,
+        },
+      ],
+    }),
+  ],
+  providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard, // ✅ Global rate-limiting
+    },
+  ],
 })
 export class AppModule {}
