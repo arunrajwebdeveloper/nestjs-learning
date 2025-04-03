@@ -4,6 +4,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
+import { MyLoggerModule } from './my-logger/my-logger.module';
 import * as dotenv from 'dotenv';
 
 dotenv.config();
@@ -32,6 +33,7 @@ if (!mongoUri) {
         },
       ],
     }),
+    MyLoggerModule,
   ],
   providers: [
     {
