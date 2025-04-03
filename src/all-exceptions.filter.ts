@@ -49,7 +49,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         .join(', ');
     } else if (exception instanceof mongoose.Error.CastError) {
       myResponseObj.statusCode = HttpStatus.BAD_REQUEST;
-      myResponseObj.response = `Invalid ${exception.path}: ${exception.value}`;
+      myResponseObj.response = `Invalid ${exception.path}: ${JSON.stringify(exception.value)}`;
     } else if ((exception as any)?.code === 11000) {
       myResponseObj.statusCode = HttpStatus.CONFLICT;
       myResponseObj.response = `Duplicate key error: ${JSON.stringify(

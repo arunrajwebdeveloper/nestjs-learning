@@ -24,9 +24,10 @@ async function bootstrap() {
 
   // Swagger Configuration
   const config = new DocumentBuilder()
-    .setTitle('My API')
-    .setDescription('API Documentation for My Project')
+    .setTitle('My NestJs Learning API')
+    .setDescription('API Documentation for My NestJs Learning Project')
     .setVersion('1.0')
+    .addServer('/api')
     .addBearerAuth() // 🔐 Adds Authorization header for JWT
     .build();
 
