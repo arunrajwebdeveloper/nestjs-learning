@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { BaseExceptionFilter } from '@nestjs/core';
 import { Request, Response } from 'express';
-import { MyLoggerService } from './modules/logger/my-logger.service';
+import { MyLoggerService } from './my-logger/my-logger.service';
 import mongoose from 'mongoose';
 
 type MyResponseObj = {
