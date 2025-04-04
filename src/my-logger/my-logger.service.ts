@@ -8,9 +8,9 @@ import * as path from 'path';
 export class MyLoggerService extends ConsoleLogger {
   async logToFile(entry: any) {
     const formattedEntry = `${Intl.DateTimeFormat('en-US', {
-      dateStyle: 'short',
-      timeStyle: 'short',
-      timeZone: 'America/Chicago',
+      dateStyle: 'full', // "full" | "long" | "medium" | "short"
+      timeStyle: 'medium', // "full" | "long" | "medium" | "short"
+      timeZone: 'Asia/Kolkata',
     }).format(new Date())}\t${entry}\n`;
 
     try {

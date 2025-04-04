@@ -14,7 +14,7 @@ type MyResponseObj = {
   timestamp: string;
   path: string;
   response: string | object;
-  ip: string | undefined; // Add IP field
+  ip: string | undefined;
 };
 
 @Catch()
