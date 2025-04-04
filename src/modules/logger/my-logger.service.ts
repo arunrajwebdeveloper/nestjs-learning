@@ -1,11 +1,10 @@
 import { Injectable, ConsoleLogger } from '@nestjs/common';
-import * as fs from 'fs';
-import { promises as fsPromises } from 'fs';
+import fs, { promises as fsPromises } from 'fs';
 import * as path from 'path';
 
 @Injectable()
 export class MyLoggerService extends ConsoleLogger {
-  async logToFile(entry) {
+  async logToFile(entry: string) {
     const formattedEntry = `${Intl.DateTimeFormat('en-US', {
       dateStyle: 'short',
       timeStyle: 'short',
